@@ -1,44 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" class="dark"> <!-- Set to dark mode permanently -->
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spendly - Personal Finance Dashboard</title>
-
-    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Chart.js for data visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Lucide Icons for modern icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- Google Fonts: Inter for a clean, modern look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
-        /* Applying the Inter font to the whole application */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f172a; /* Dark slate background */
-        }
-        /* Custom scrollbar for a more polished look */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1e293b;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #475569;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #64748b;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
     </style>
 </head>
 <body class="text-gray-200">
@@ -50,20 +26,21 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                 <h1 class="text-3xl font-bold text-white">Spendly</h1>
             </div>
-            <p class="text-slate-400 mb-6">Enter your name to continue</p>
-            <form id="login-form">
-                <input type="text" id="name-input" placeholder="Your Name" class="w-full px-4 py-3 bg-slate-700 border-2 border-transparent focus:border-green-500 focus:ring-0 rounded-lg text-white placeholder-slate-400" required>
-                <button type="submit" class="w-full mt-4 px-4 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-colors">
-                    Login
-                </button>
+             <p class="text-slate-400 mb-6">Sign in or create an account</p>
+            <p id="auth-error" class="text-red-400 mb-4 text-sm h-5"></p>
+            <form id="auth-form" onsubmit="return false;">
+                <input type="email" id="email-input" placeholder="Email Address" class="w-full px-4 py-3 bg-slate-700 border-2 border-transparent focus:border-green-500 focus:ring-0 rounded-lg text-white placeholder-slate-400 mb-4" required>
+                <input type="password" id="password-input" placeholder="Password" class="w-full px-4 py-3 bg-slate-700 border-2 border-transparent focus:border-green-500 focus:ring-0 rounded-lg text-white placeholder-slate-400" required>
+                <div class="flex gap-4 mt-4">
+                    <button type="button" id="login-btn" class="w-full px-4 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-colors">Login</button>
+                    <button type="button" id="register-btn" class="w-full px-4 py-3 bg-slate-600 hover:bg-slate-500 text-white font-bold rounded-lg transition-colors">Register</button>
+                </div>
             </form>
         </div>
     </div>
 
-
     <!-- Main Dashboard Container (hidden by default) -->
     <div id="dashboard-container" class="flex h-screen hidden">
-        <!-- Sidebar Navigation -->
         <aside class="w-64 bg-slate-900/70 p-6 hidden md:flex flex-col justify-between">
             <div>
                 <div class="flex items-center gap-3 mb-10">
@@ -71,199 +48,124 @@
                     <h1 class="text-xl font-bold text-white">Spendly</h1>
                 </div>
                 <nav class="flex flex-col gap-4">
-                    <a href="#" class="flex items-center gap-3 px-4 py-2 bg-slate-700/50 rounded-lg text-white font-semibold">
-                        <i data-lucide="layout-dashboard"></i>
-                        <span>Dashboard</span>
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-700/40 transition-colors">
-                        <i data-lucide="arrow-left-right"></i>
-                        <span>Transactions</span>
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-700/40 transition-colors">
-                        <i data-lucide="candlestick-chart"></i>
-                        <span>Investments</span>
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-700/40 transition-colors">
-                        <i data-lucide="settings"></i>
-                        <span>Settings</span>
-                    </a>
+                    <a href="#" class="flex items-center gap-3 px-4 py-2 bg-slate-700/50 rounded-lg text-white font-semibold"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></a>
+                    <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-700/40"><i data-lucide="arrow-left-right"></i><span>Transactions</span></a>
                 </nav>
             </div>
             <div class="border-t border-slate-700 pt-4">
-                 <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-700/40 transition-colors">
-                    <i data-lucide="log-out"></i>
-                    <span>Logout</span>
-                </a>
+                 <a href="#" id="logout-btn" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-700/40"><i data-lucide="log-out"></i><span>Logout</span></a>
             </div>
         </aside>
 
-        <!-- Main Content Area -->
         <main class="flex-1 p-4 md:p-8 overflow-y-auto">
-            <!-- Header -->
             <header class="flex justify-between items-center mb-8">
                 <div>
                     <h2 id="welcome-message" class="text-3xl font-bold text-white"></h2>
                     <p class="text-slate-400">Here's your financial overview for today.</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <!-- Theme toggle button has been removed -->
-                    <button class="p-2 rounded-full text-slate-400 hover:bg-slate-700/50">
-                        <i data-lucide="bell"></i>
-                    </button>
+                    <button class="p-2 rounded-full text-slate-400 hover:bg-slate-700/50"><i data-lucide="bell"></i></button>
                     <img src="https://placehold.co/40x40/64748b/FFF?text=U" alt="User Avatar" class="rounded-full">
                 </div>
             </header>
-
-            <!-- Dashboard Widgets Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-                <!-- Summary Cards -->
-                <div class="bg-slate-800/50 p-6 rounded-xl shadow-lg flex items-center gap-5">
-                    <div class="p-3 bg-green-500/10 rounded-lg"><i data-lucide="wallet" class="text-green-400"></i></div>
-                    <div>
-                        <p class="text-sm text-slate-400">Total Balance</p>
-                        <p id="total-balance" class="text-2xl font-bold text-white">$54,210.50</p>
-                    </div>
-                </div>
-                <div class="bg-slate-800/50 p-6 rounded-xl shadow-lg flex items-center gap-5">
-                    <div class="p-3 bg-red-500/10 rounded-lg"><i data-lucide="shopping-cart" class="text-red-400"></i></div>
-                    <div>
-                        <p class="text-sm text-slate-400">Monthly Spending</p>
-                        <p id="monthly-spending" class="text-2xl font-bold text-white">$1,845.33</p>
-                    </div>
-                </div>
-                <div class="bg-slate-800/50 p-6 rounded-xl shadow-lg flex items-center gap-5">
-                    <div class="p-3 bg-blue-500/10 rounded-lg"><i data-lucide="trending-up" class="text-blue-400"></i></div>
-                    <div>
-                        <p class="text-sm text-slate-400">Investment Gains</p>
-                        <p class="text-2xl font-bold text-white">+$789.12</p>
-                    </div>
-                </div>
-
-                <!-- Expense Breakdown Chart (Left Side) -->
-                <div class="lg:col-span-2 bg-slate-800/50 p-6 rounded-xl shadow-lg">
-                    <h3 class="text-lg font-semibold mb-4 text-white">Expense Breakdown</h3>
-                    <div class="h-80">
-                        <canvas id="expenseChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Investment Portfolio (Right Side) -->
-                <div class="bg-slate-800/50 p-6 rounded-xl shadow-lg">
-                    <h3 class="text-lg font-semibold mb-4 text-white">Investment Portfolio</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3"><img src="https://placehold.co/32x32/000000/FFFFFF?text=A" alt="Apple Inc." class="rounded-full"/><div><p class="font-bold">AAPL</p><p class="text-xs text-slate-400">Apple Inc.</p></div></div><div><p class="font-bold text-right">$12,500.00</p><p class="text-xs text-green-400 text-right">+2.1%</p></div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3"><img src="https://placehold.co/32x32/4285F4/FFFFFF?text=G" alt="Google" class="rounded-full"/><div><p class="font-bold">GOOGL</p><p class="text-xs text-slate-400">Alphabet Inc.</p></div></div><div><p class="font-bold text-right">$8,230.50</p><p class="text-xs text-red-400 text-right">-0.5%</p></div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3"><img src="https://placehold.co/32x32/000000/FFFFFF?text=TS" alt="Tesla" class="rounded-full"/><div><p class="font-bold">TSLA</p><p class="text-xs text-slate-400">Tesla, Inc.</p></div></div><div><p class="font-bold text-right">$5,400.00</p><p class="text-xs text-green-400 text-right">+5.8%</p></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Transactions Table -->
-                <div class="lg:col-span-3 bg-slate-800/50 p-6 rounded-xl shadow-lg">
-                    <h3 class="text-lg font-semibold mb-4 text-white">Recent Transactions</h3>
-                    <table class="w-full text-left">
-                        <thead class="border-b border-slate-700 text-sm text-slate-400">
-                            <tr><th class="py-2">Description</th><th class="py-2">Category</th><th class="py-2">Date</th><th class="py-2 text-right">Amount</th></tr>
-                        </thead>
-                        <tbody id="transactions-table-body">
-                            <tr class="border-b border-slate-800"><td class="py-3 font-medium">Starbucks Coffee</td><td><span class="px-2 py-1 text-xs bg-yellow-500/10 text-yellow-400 rounded-full">Food</span></td><td>July 18, 2025</td><td class="text-right font-mono text-red-400">-$5.75</td></tr>
-                            <tr class="border-b border-slate-800"><td class="py-3 font-medium">Monthly Salary</td><td><span class="px-2 py-1 text-xs bg-green-500/10 text-green-400 rounded-full">Income</span></td><td>July 15, 2025</td><td class="text-right font-mono text-green-400">+$4,500.00</td></tr>
-                            <tr class="border-b border-slate-800"><td class="py-3 font-medium">Netflix Subscription</td><td><span class="px-2 py-1 text-xs bg-purple-500/10 text-purple-400 rounded-full">Bills</span></td><td>July 14, 2025</td><td class="text-right font-mono text-red-400">-$15.49</td></tr>
-                            <tr><td class="py-3 font-medium">Grocery Shopping</td><td><span class="px-2 py-1 text-xs bg-yellow-500/10 text-yellow-400 rounded-full">Food</span></td><td>July 12, 2025</td><td class="text-right font-mono text-red-400">-$124.50</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <!-- All the dashboard content like charts and tables go here -->
         </main>
     </div>
 
     <!-- JAVASCRIPT LOGIC SECTION -->
     <script>
-        // === DOM Element Selection ===
+        const API_URL = 'http://localhost:3000';
+
         const loginModal = document.getElementById('login-modal');
-        const loginForm = document.getElementById('login-form');
-        const nameInput = document.getElementById('name-input');
+        const emailInput = document.getElementById('email-input');
+        const passwordInput = document.getElementById('password-input');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const authError = document.getElementById('auth-error');
+        const logoutBtn = document.getElementById('logout-btn');
         const dashboardContainer = document.getElementById('dashboard-container');
         const welcomeMessage = document.getElementById('welcome-message');
 
-        // === Login Logic ===
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const userName = nameInput.value.trim();
-            if (userName) {
-                localStorage.setItem('userName', userName); // Save user name
-                welcomeMessage.textContent = `Welcome Back, ${userName}!`;
-                loginModal.classList.add('transition-opacity', 'duration-500', 'opacity-0');
-                setTimeout(() => {
-                    loginModal.classList.add('hidden');
-                    dashboardContainer.classList.remove('hidden');
-                }, 500);
+        async function handleApiRequest(endpoint, body) {
+            authError.textContent = '';
+            try {
+                const response = await fetch(`${API_URL}/api/${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || `An error occurred.`);
+                }
+                return data;
+            } catch (error) {
+                authError.textContent = error.message;
+                return null;
             }
-        });
+        }
 
-        // === Page Initialization ===
-        const initializeApp = () => {
-            // 1. Initialize Lucide Icons
-            lucide.createIcons();
+        async function handleLogin() {
+            const body = { email: emailInput.value.trim(), password: passwordInput.value.trim() };
+            if (!body.email || !body.password) {
+                authError.textContent = 'Please enter both email and password.';
+                return;
+            }
+            const data = await handleApiRequest('login', body);
+            if (data) {
+                localStorage.setItem('spendly_token', data.token);
+                localStorage.setItem('spendly_userName', data.userName);
+                showDashboard(data.userName);
+            }
+        }
 
-            // 2. Check for saved user name
-            const savedName = localStorage.getItem('userName');
-            if (savedName) {
-                welcomeMessage.textContent = `Welcome Back, ${savedName}!`;
+        async function handleRegister() {
+            const name = prompt("Please enter your full name to register:");
+            if (!name) return;
+            const body = { name, email: emailInput.value.trim(), password: passwordInput.value.trim() };
+            if (!body.email || !body.password) {
+                authError.textContent = 'Please fill out email and password.';
+                return;
+            }
+            const data = await handleApiRequest('register', body);
+            if (data) {
+                alert('Registration successful! Please log in.');
+                passwordInput.value = '';
+                emailInput.focus();
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('spendly_token');
+            localStorage.removeItem('spendly_userName');
+            dashboardContainer.classList.add('hidden');
+            loginModal.classList.remove('hidden', 'opacity-0');
+            emailInput.value = '';
+            passwordInput.value = '';
+        }
+
+        function showDashboard(userName) {
+            welcomeMessage.textContent = `Welcome Back, ${userName}!`;
+            loginModal.classList.add('transition-opacity', 'duration-500', 'opacity-0');
+            setTimeout(() => {
                 loginModal.classList.add('hidden');
                 dashboardContainer.classList.remove('hidden');
+            }, 500);
+        }
+
+        function initializeApp() {
+            lucide.createIcons();
+            const token = localStorage.getItem('spendly_token');
+            const userName = localStorage.getItem('spendly_userName');
+            if (token && userName) {
+                showDashboard(userName);
             }
-            
-            // 3. Setup the Expense Chart
-            const ctx = document.getElementById('expenseChart').getContext('2d');
-            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-            gradient.addColorStop(0, 'rgba(34, 197, 94, 0.4)');
-            gradient.addColorStop(1, 'rgba(34, 197, 94, 0)');
+        }
 
-            const expenseChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [{
-                        label: 'Expenses',
-                        data: [650, 590, 800, 810, 560, 550, 1845],
-                        backgroundColor: gradient,
-                        borderColor: 'rgba(34, 197, 94, 1)',
-                        borderWidth: 2,
-                        pointBackgroundColor: 'rgba(34, 197, 94, 1)',
-                        pointRadius: 4,
-                        tension: 0.4,
-                        fill: true,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { 
-                            beginAtZero: true, 
-                            grid: { color: 'rgba(255, 255, 255, 0.1)' }, // Dark mode grid color
-                            ticks: { color: '#94a3b8' } // Dark mode tick color
-                        },
-                        x: { 
-                            grid: { display: false }, 
-                            ticks: { color: '#94a3b8' } // Dark mode tick color
-                        }
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
-        };
-
-        // Run the initialization function when the page content has loaded
+        loginBtn.addEventListener('click', handleLogin);
+        registerBtn.addEventListener('click', handleRegister);
+        logoutBtn.addEventListener('click', handleLogout);
         document.addEventListener('DOMContentLoaded', initializeApp);
-
     </script>
 </body>
 </html>
