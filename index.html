@@ -7,8 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0f172a; }
@@ -19,14 +17,14 @@
 </head>
 <body class="text-gray-200">
 
-    <!-- Login Modal -->
+    <!-- Login Modal (No Changes) -->
     <div id="login-modal" class="fixed inset-0 bg-slate-900 bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50">
         <div class="w-full max-w-sm p-8 bg-slate-800 rounded-2xl shadow-2xl text-center">
-            <div class="flex justify-center items-center gap-3 mb-4">
+             <div class="flex justify-center items-center gap-3 mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                 <h1 class="text-3xl font-bold text-white">Spendly</h1>
             </div>
-             <p class="text-slate-400 mb-6">Sign in or create an account</p>
+            <p class="text-slate-400 mb-6">Sign in or create an account</p>
             <p id="auth-error" class="text-red-400 mb-4 text-sm h-5"></p>
             <form id="auth-form" onsubmit="return false;">
                 <input type="email" id="email-input" placeholder="Email Address" class="w-full px-4 py-3 bg-slate-700 border-2 border-transparent focus:border-green-500 focus:ring-0 rounded-lg text-white placeholder-slate-400 mb-4" required>
@@ -39,133 +37,130 @@
         </div>
     </div>
 
-    <!-- Main Dashboard Container (hidden by default) -->
+    <!-- Add Transaction Modal (One small change here) -->
+    <div id="transaction-modal" class="fixed inset-0 bg-slate-900 bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="w-full max-w-md p-8 bg-slate-800 rounded-2xl shadow-2xl">
+            <h2 class="text-2xl font-bold text-white mb-6">Add New Transaction</h2>
+            <form id="transaction-form">
+                <div class="mb-4">
+                    <label for="description" class="block text-sm font-medium text-slate-400 mb-2">Description</label>
+                    <input type="text" id="description" class="w-full px-4 py-2 bg-slate-700 rounded-lg" required>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="amount" class="block text-sm font-medium text-slate-400 mb-2">Amount</label>
+                        <!-- **** THIS IS THE CHANGE **** -->
+                        <input type="number" step="0.01" id="amount" placeholder="e.g., 15.50" class="w-full px-4 py-2 bg-slate-700 rounded-lg" required>
+                    </div>
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-slate-400 mb-2">Category</label>
+                        <select id="category" class="w-full px-4 py-2 bg-slate-700 rounded-lg" required>
+                            <option>Income</option>
+                            <option>Food</option>
+                            <option>Bills</option>
+                            <option>Shopping</option>
+                            <option>Transport</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+                 <div class="mb-6">
+                    <label for="date" class="block text-sm font-medium text-slate-400 mb-2">Date</label>
+                    <input type="date" id="date" class="w-full px-4 py-2 bg-slate-700 rounded-lg" required>
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button type="button" id="cancel-transaction-btn" class="px-6 py-2 bg-slate-600 hover:bg-slate-500 font-semibold rounded-lg">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-green-500 hover:bg-green-600 font-semibold rounded-lg">Add Transaction</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Container (No Changes) -->
     <div id="dashboard-container" class="flex h-screen hidden">
+       <!-- All sidebar and main content remains the same -->
         <aside class="w-64 bg-slate-900/70 p-6 hidden md:flex flex-col justify-between">
             <div>
-                <div class="flex items-center gap-3 mb-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    <h1 class="text-xl font-bold text-white">Spendly</h1>
-                </div>
+                <div class="flex items-center gap-3 mb-10"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg><h1 class="text-xl font-bold text-white">Spendly</h1></div>
                 <nav class="flex flex-col gap-4">
                     <a href="#" class="flex items-center gap-3 px-4 py-2 bg-slate-700/50 rounded-lg text-white font-semibold"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></a>
                     <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-700/40"><i data-lucide="arrow-left-right"></i><span>Transactions</span></a>
+                    <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-700/40"><i data-lucide="candlestick-chart"></i><span>Investments</span></a>
                 </nav>
             </div>
-            <div class="border-t border-slate-700 pt-4">
-                 <a href="#" id="logout-btn" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-700/40"><i data-lucide="log-out"></i><span>Logout</span></a>
-            </div>
+            <div class="border-t border-slate-700 pt-4"><a href="#" id="logout-btn" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-700/40"><i data-lucide="log-out"></i><span>Logout</span></a></div>
         </aside>
-
         <main class="flex-1 p-4 md:p-8 overflow-y-auto">
             <header class="flex justify-between items-center mb-8">
-                <div>
-                    <h2 id="welcome-message" class="text-3xl font-bold text-white"></h2>
-                    <p class="text-slate-400">Here's your financial overview for today.</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button class="p-2 rounded-full text-slate-400 hover:bg-slate-700/50"><i data-lucide="bell"></i></button>
-                    <img src="https://placehold.co/40x40/64748b/FFF?text=U" alt="User Avatar" class="rounded-full">
+                <div><h2 id="welcome-message" class="text-3xl font-bold text-white"></h2><p class="text-slate-400">Here's your financial overview for today.</p></div>
+                <div class="flex items-center gap-4">
+                    <button id="add-transaction-btn" class="flex items-center gap-2 px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors"><i data-lucide="plus-circle" class="w-5 h-5"></i><span>Add Transaction</span></button>
+                    <button class="p-2 rounded-full text-slate-400 hover:bg-slate-700/50"><i data-lucide="bell"></i></button><img src="https://placehold.co/40x40/64748b/FFF?text=U" alt="User Avatar" class="rounded-full">
                 </div>
             </header>
-            <!-- All the dashboard content like charts and tables go here -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="bg-slate-800/50 p-6 rounded-xl shadow-lg flex items-center gap-5">
+                    <div class="p-3 bg-green-500/10 rounded-lg"><i data-lucide="wallet" class="text-green-400"></i></div>
+                    <div><p class="text-sm text-slate-400">Total Balance</p><p id="total-balance" class="text-2xl font-bold text-white">$0.00</p></div>
+                </div>
+                <div class="bg-slate-800/50 p-6 rounded-xl shadow-lg flex items-center gap-5">
+                    <div class="p-3 bg-red-500/10 rounded-lg"><i data-lucide="shopping-cart" class="text-red-400"></i></div>
+                    <div><p class="text-sm text-slate-400">Monthly Spending</p><p id="monthly-spending" class="text-2xl font-bold text-white">$0.00</p></div>
+                </div>
+                <div class="bg-slate-800/50 p-6 rounded-xl shadow-lg flex items-center gap-5">
+                    <div class="p-3 bg-blue-500/10 rounded-lg"><i data-lucide="trending-up" class="text-blue-400"></i></div>
+                    <div><p class="text-sm text-slate-400">Investment Gains</p><p id="investment-gains" class="text-2xl font-bold text-white">+$0.00</p></div>
+                </div>
+                <div class="lg:col-span-2 bg-slate-800/50 p-6 rounded-xl shadow-lg"><h3 class="text-lg font-semibold mb-4 text-white">Expense Breakdown</h3><div class="h-80"><canvas id="expenseChart"></canvas></div></div>
+                <div class="bg-slate-800/50 p-6 rounded-xl shadow-lg"><h3 class="text-lg font-semibold mb-4 text-white">Investment Portfolio</h3><div id="investment-portfolio" class="space-y-4"></div></div>
+                <div class="lg:col-span-3 bg-slate-800/50 p-6 rounded-xl shadow-lg">
+                    <h3 class="text-lg font-semibold mb-4 text-white">Recent Transactions</h3>
+                    <table class="w-full text-left">
+                        <thead class="border-b border-slate-700 text-sm text-slate-400"><tr><th class="py-2">Description</th><th class="py-2">Category</th><th class="py-2">Date</th><th class="py-2 text-right">Amount</th></tr></thead>
+                        <tbody id="transactions-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
         </main>
     </div>
 
-    <!-- JAVASCRIPT LOGIC SECTION -->
+    <!-- JavaScript (No Changes) -->
     <script>
-        const API_URL = 'http://localhost:3000';
-
-        const loginModal = document.getElementById('login-modal');
-        const emailInput = document.getElementById('email-input');
-        const passwordInput = document.getElementById('password-input');
-        const loginBtn = document.getElementById('login-btn');
-        const registerBtn = document.getElementById('register-btn');
-        const authError = document.getElementById('auth-error');
-        const logoutBtn = document.getElementById('logout-btn');
-        const dashboardContainer = document.getElementById('dashboard-container');
-        const welcomeMessage = document.getElementById('welcome-message');
-
-        async function handleApiRequest(endpoint, body) {
-            authError.textContent = '';
-            try {
-                const response = await fetch(`${API_URL}/api/${endpoint}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
-                });
-                const data = await response.json();
-                if (!response.ok) {
-                    throw new Error(data.error || `An error occurred.`);
-                }
-                return data;
-            } catch (error) {
-                authError.textContent = error.message;
-                return null;
-            }
-        }
-
-        async function handleLogin() {
-            const body = { email: emailInput.value.trim(), password: passwordInput.value.trim() };
-            if (!body.email || !body.password) {
-                authError.textContent = 'Please enter both email and password.';
-                return;
-            }
-            const data = await handleApiRequest('login', body);
-            if (data) {
-                localStorage.setItem('spendly_token', data.token);
-                localStorage.setItem('spendly_userName', data.userName);
-                showDashboard(data.userName);
-            }
-        }
-
-        async function handleRegister() {
-            const name = prompt("Please enter your full name to register:");
-            if (!name) return;
-            const body = { name, email: emailInput.value.trim(), password: passwordInput.value.trim() };
-            if (!body.email || !body.password) {
-                authError.textContent = 'Please fill out email and password.';
-                return;
-            }
-            const data = await handleApiRequest('register', body);
-            if (data) {
-                alert('Registration successful! Please log in.');
-                passwordInput.value = '';
-                emailInput.focus();
-            }
-        }
-
-        function handleLogout() {
-            localStorage.removeItem('spendly_token');
-            localStorage.removeItem('spendly_userName');
-            dashboardContainer.classList.add('hidden');
-            loginModal.classList.remove('hidden', 'opacity-0');
-            emailInput.value = '';
-            passwordInput.value = '';
-        }
-
-        function showDashboard(userName) {
-            welcomeMessage.textContent = `Welcome Back, ${userName}!`;
-            loginModal.classList.add('transition-opacity', 'duration-500', 'opacity-0');
-            setTimeout(() => {
-                loginModal.classList.add('hidden');
-                dashboardContainer.classList.remove('hidden');
-            }, 500);
-        }
-
-        function initializeApp() {
-            lucide.createIcons();
-            const token = localStorage.getItem('spendly_token');
-            const userName = localStorage.getItem('spendly_userName');
-            if (token && userName) {
-                showDashboard(userName);
-            }
-        }
-
-        loginBtn.addEventListener('click', handleLogin);
-        registerBtn.addEventListener('click', handleRegister);
-        logoutBtn.addEventListener('click', handleLogout);
-        document.addEventListener('DOMContentLoaded', initializeApp);
+    const API_URL = 'http://localhost:3000';
+    let expenseChart = null;
+    const loginModal = document.getElementById('login-modal');
+    const emailInput = document.getElementById('email-input');
+    const passwordInput = document.getElementById('password-input');
+    const loginBtn = document.getElementById('login-btn');
+    const registerBtn = document.getElementById('register-btn');
+    const authError = document.getElementById('auth-error');
+    const logoutBtn = document.getElementById('logout-btn');
+    const dashboardContainer = document.getElementById('dashboard-container');
+    const welcomeMessage = document.getElementById('welcome-message');
+    const transactionModal = document.getElementById('transaction-modal');
+    const addTransactionBtn = document.getElementById('add-transaction-btn');
+    const cancelTransactionBtn = document.getElementById('cancel-transaction-btn');
+    const transactionForm = document.getElementById('transaction-form');
+    async function handleApiAuth(endpoint, body) { authError.textContent = ''; try { const response = await fetch(`${API_URL}/api/${endpoint}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); const data = await response.json(); if (!response.ok) throw new Error(data.error); return data; } catch (error) { authError.textContent = error.message; return null; } }
+    async function handleLogin() { const body = { email: emailInput.value.trim(), password: passwordInput.value.trim() }; if (!body.email || !body.password) { authError.textContent = 'Email and password are required.'; return; } const data = await handleApiAuth('login', body); if (data) { localStorage.setItem('spendly_token', data.token); localStorage.setItem('spendly_userName', data.userName); await showDashboard(data.userName); } }
+    async function handleRegister() { const name = prompt("Enter your full name:"); if (!name) return; const body = { name, email: emailInput.value.trim(), password: passwordInput.value.trim() }; if (!body.email || !body.password) { authError.textContent = 'Email and password are required.'; return; } const data = await handleApiAuth('register', body); if (data) { alert(data.message + ' Please log in.'); passwordInput.value = ''; emailInput.focus(); } }
+    function handleLogout() { localStorage.clear(); dashboardContainer.classList.add('hidden'); loginModal.classList.remove('hidden', 'opacity-0'); emailInput.value = ''; passwordInput.value = ''; }
+    async function handleTransactionSubmit(e) { e.preventDefault(); const token = localStorage.getItem('spendly_token'); const transaction = { description: document.getElementById('description').value, amount: document.getElementById('amount').value, category: document.getElementById('category').value, date: document.getElementById('date').value, }; try { const response = await fetch(`${API_URL}/api/transactions`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(transaction) }); if (!response.ok) { const errData = await response.json(); throw new Error(errData.error || 'Failed to add transaction'); } transactionModal.classList.add('hidden'); transactionForm.reset(); document.getElementById('date').valueAsDate = new Date(); await fetchAndRenderDashboard(); } catch (error) { alert(error.message); } }
+    async function fetchAndRenderDashboard() { const token = localStorage.getItem('spendly_token'); if (!token) { handleLogout(); return; } try { const response = await fetch(`${API_URL}/api/dashboard`, { headers: { 'Authorization': `Bearer ${token}` } }); if (response.status === 401 || response.status === 403) { handleLogout(); return; } const data = await response.json(); document.getElementById('total-balance').textContent = formatCurrency(data.summary.totalBalance); document.getElementById('monthly-spending').textContent = formatCurrency(data.summary.monthlySpending); document.getElementById('investment-gains').textContent = `+${formatCurrency(data.summary.investmentGains)}`; populateTransactions(data.recentTransactions); populateInvestments(data.investments); updateChart(data.expenseChartData); } catch (error) { console.error("Failed to fetch dashboard data:", error); } }
+    function populateTransactions(transactions) { const tableBody = document.getElementById('transactions-table-body'); tableBody.innerHTML = ''; const categoryColors = { 'Food': 'bg-yellow-500/10 text-yellow-400', 'Income': 'bg-green-500/10 text-green-400', 'Bills': 'bg-purple-500/10 text-purple-400', 'Shopping': 'bg-blue-500/10 text-blue-400', 'Transport': 'bg-indigo-500/10 text-indigo-400', 'Other': 'bg-slate-700' }; transactions.forEach(t => { const amountClass = t.amount > 0 ? 'text-green-400' : 'text-red-400'; const sign = t.amount > 0 ? '+' : ''; tableBody.innerHTML += `<tr class="border-b border-slate-800"><td class="py-3 font-medium">${t.description}</td><td><span class="px-2 py-1 text-xs ${categoryColors[t.category] || 'bg-slate-700'} rounded-full">${t.category}</span></td><td>${new Date(t.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</td><td class="text-right font-mono ${amountClass}">${sign}${formatCurrency(t.amount)}</td></tr>`; }); }
+    function populateInvestments(investments) { const portfolioDiv = document.getElementById('investment-portfolio'); portfolioDiv.innerHTML = ''; investments.forEach(i => { const changeClass = i.change >= 0 ? 'text-green-400' : 'text-red-400'; const sign = i.change >= 0 ? '+' : ''; const stockInitial = i.ticker.substring(0, 2); portfolioDiv.innerHTML += `<div class="flex items-center justify-between"><div class="flex items-center gap-3"><img src="https://placehold.co/32x32/1e293b/94a3b8?text=${stockInitial}" alt="${i.name}" class="rounded-full"/><div><p class="font-bold">${i.ticker}</p><p class="text-xs text-slate-400">${i.name}</p></div></div><div><p class="font-bold text-right">${formatCurrency(i.value)}</p><p class="text-xs ${changeClass} text-right">${sign}${i.change}%</p></div></div>`; }); }
+    function formatCurrency(value) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value); }
+    async function showDashboard(userName) { welcomeMessage.textContent = `Welcome Back, ${userName}!`; await fetchAndRenderDashboard(); loginModal.classList.add('hidden'); dashboardContainer.classList.remove('hidden'); }
+    function initializeChart() { const ctx = document.getElementById('expenseChart').getContext('2d'); const gradient = ctx.createLinearGradient(0, 0, 0, 300); gradient.addColorStop(0, 'rgba(34, 197, 94, 0.4)'); gradient.addColorStop(1, 'rgba(34, 197, 94, 0)'); expenseChart = new Chart(ctx, { type: 'line', data: { labels: [], datasets: [{ label: 'Expenses', data: [], backgroundColor: gradient, borderColor: 'rgba(34, 197, 94, 1)', borderWidth: 2, pointBackgroundColor: 'rgba(34, 197, 94, 1)', tension: 0.4, fill: true }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#94a3b8' } }, x: { grid: { display: false }, ticks: { color: '#94a3b8' } } }, plugins: { legend: { display: false } } } }); }
+    function updateChart(data) { if (!expenseChart) return; expenseChart.data.labels = data.map(d => d.month); expenseChart.data.datasets[0].data = data.map(d => d.expense); expenseChart.update(); }
+    async function initializeApp() { lucide.createIcons(); initializeChart(); document.getElementById('date').valueAsDate = new Date(); const token = localStorage.getItem('spendly_token'); const userName = localStorage.getItem('spendly_userName'); if (token && userName) { await showDashboard(userName); } else { loginModal.classList.remove('hidden'); } }
+    loginBtn.addEventListener('click', handleLogin);
+    registerBtn.addEventListener('click', handleRegister);
+    logoutBtn.addEventListener('click', handleLogout);
+    addTransactionBtn.addEventListener('click', () => transactionModal.classList.remove('hidden'));
+    cancelTransactionBtn.addEventListener('click', () => { transactionModal.classList.add('hidden'); transactionForm.reset(); document.getElementById('date').valueAsDate = new Date(); });
+    transactionForm.addEventListener('submit', handleTransactionSubmit);
+    document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 </body>
 </html>
